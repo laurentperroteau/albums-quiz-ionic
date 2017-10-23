@@ -1,23 +1,23 @@
-import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { FIRST_PAGE_RUN } from '../pages';
+import { FIRST_PAGE_RUN, ROOT_MENU } from '../pages';
 
 @Component({
   template: `
 <ion-menu [content]="content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Pages</ion-title>
+      <ion-title>Menu</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
+      <button menuClose ion-item *ngFor="let p of menu" (click)="openPage(p)">
+        {{ p.title }}
       </button>
     </ion-list>
   </ion-content>
@@ -27,15 +27,20 @@ import { FIRST_PAGE_RUN } from '../pages';
   `
 })
 export class MyApp {
+  @ViewChild(Nav) nav: Nav;
+
   rootPage:any = FIRST_PAGE_RUN;
+  menu = ROOT_MENU;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
     });
+  }
+
+  openPage(page) {
+    this.nav.setRoot(page.component);
   }
 }
 
