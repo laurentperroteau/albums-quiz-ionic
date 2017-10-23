@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
+import { UserService } from '../../app/core/services/user.service';
 
 @IonicPage()
 @Component({
@@ -15,18 +16,34 @@ import { IonicPage, NavController } from 'ionic-angular';
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <button ion-button icon-start>
+    <ion-icon name="trophy"></ion-icon>
+    Répondre aux questions
+  </button>
+
+  <button ion-button icon-end (click)="goToBO()">
+    <ion-icon name="add"></ion-icon>
+    Créer des questions
+  </button>
 </ion-content>
 `
 })
 export class HomePage {
   title = 'Albums Quiz';
 
-  constructor(public navCtrl: NavController) {
+  constructor(
+    private _navCtrl: NavController,
+    private _userService: UserService,) {
 
   }
 
+  goToBO() {
+    this._userService.isLogin().subscribe(isLogin => {
+      if (isLogin) {
+        console.log('go to bo');
+      } else {
+        this._userService.login();
+      }
+    });
+  }
 }

@@ -22,15 +22,15 @@ import { UserService } from './core';
       <button menuClose ion-item *ngFor="let p of menu" (click)="openPage(p)">
         {{ p.title }}
       </button>
-      <button menuClose ion-item *ngIf="!isLogin()" (click)="login()">
+      <button menuClose ion-item *ngIf="!isLogin" (click)="login()">
         Login
       </button>
-      <button menuClose ion-item *ngIf="isLogin()" (click)="logout()">
+      <button menuClose ion-item *ngIf="isLogin" (click)="logout()">
         Logout
       </button>
     </ion-list>
     <ion-footer>
-      <div ion-item item-end *ngIf="isLogin()">
+      <div ion-item item-end *ngIf="isLogin">
         Bonjour {{ user.displayName }}
       </div>
     </ion-footer>
@@ -47,6 +47,7 @@ export class MyApp {
   menu = ROOT_MENU;
 
   user: User;
+  isLogin = false;
 
   constructor(
     platform: Platform,
@@ -60,7 +61,8 @@ export class MyApp {
 
       this._userService.user$.subscribe(u => {
         this.user = u;
-        console.log(this.user);
+        this.isLogin = this.user && !this.user.isAnonymous;
+        console.log(this.user.displayName);
       });
     });
   }
@@ -75,10 +77,6 @@ export class MyApp {
 
   logout() {
     this._userService.logout();
-  }
-
-  isLogin() {
-    return this.user && !this.user.isAnonymous;
   }
 }
 
