@@ -3,7 +3,10 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { User } from 'firebase/app';
+
 import { FIRST_PAGE_RUN, ROOT_MENU } from '../pages';
+import { UserService } from './core';
 
 @Component({
   template: `
@@ -19,12 +22,23 @@ import { FIRST_PAGE_RUN, ROOT_MENU } from '../pages';
       <button menuClose ion-item *ngFor="let p of menu" (click)="openPage(p)">
         {{ p.title }}
       </button>
+      <button menuClose ion-item *ngIf="!isLogin()" (click)="login()">
+        Login
+      </button>
+      <button menuClose ion-item *ngIf="isLogin()" (click)="logout()">
+        Logout
+      </button>
     </ion-list>
+    <ion-footer>
+      <div ion-item item-end *ngIf="isLogin()">
+        Bonjour {{ user.displayName }}
+      </div>
+    </ion-footer>
   </ion-content>
 
 </ion-menu>
 <ion-nav #content [root]="rootPage"></ion-nav>
-  `
+`
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -32,15 +46,39 @@ export class MyApp {
   rootPage:any = FIRST_PAGE_RUN;
   menu = ROOT_MENU;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  user: User;
+
+  constructor(
+    platform: Platform,
+    statusBar: StatusBar,
+    splashScreen: SplashScreen,
+    private _userService: UserService,
+  ) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
+
+      this._userService.user$.subscribe(u => {
+        this.user = u;
+        console.log(this.user);
+      });
     });
   }
 
   openPage(page) {
     this.nav.setRoot(page.component);
+  }
+
+  login() {
+    this._userService.login();
+  }
+
+  logout() {
+    this._userService.logout();
+  }
+
+  isLogin() {
+    return this.user && !this.user.isAnonymous;
   }
 }
 
