@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 import { UserService } from '../../app/core/services/user.service';
+import { Observable } from 'rxjs/Observable';
 
 @IonicPage()
 @Component({
@@ -21,7 +22,7 @@ import { UserService } from '../../app/core/services/user.service';
     Répondre aux questions
   </button>
 
-  <button ion-button icon-end (click)="goToBO()">
+  <button *ngIf="(isLogin | async)" ion-button icon-end (click)="goToBO()">
     <ion-icon name="add"></ion-icon>
     Créer des questions
   </button>
@@ -30,19 +31,18 @@ import { UserService } from '../../app/core/services/user.service';
 })
 export class HomePage {
   title = 'Albums Quiz';
+  isLogin: Observable<boolean> = Observable.of(false);
 
   constructor(
     private _navCtrl: NavController,
-    private _userService: UserService,) {
-
+    private _userService: UserService) {
+    this.isLogin = _userService.isLogin();
   }
 
   goToBO() {
     this._userService.isLogin().subscribe(isLogin => {
       if (isLogin) {
         console.log('go to bo');
-      } else {
-        this._userService.login();
       }
     });
   }

@@ -59,10 +59,11 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
 
+      console.log('user$', this._userService.user$);
       this._userService.user$.subscribe(u => {
+        console.log('app user', u);
         this.user = u;
         this.isLogin = this.user && !this.user.isAnonymous;
-        console.log(this.user.displayName);
       });
     });
   }
