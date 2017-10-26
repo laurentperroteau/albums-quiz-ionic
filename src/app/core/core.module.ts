@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RequestService } from './services/request.service';
 import { UserService } from './services/user.service';
 // import { QuestionService } from './services/question.service';
-// import { AlbumsService } from './services/album.service';
+import { AlbumService } from './services/album.service';
 // import { UserAlbumsService } from './services/userAlbums.service';
 
 @NgModule({
@@ -19,7 +19,7 @@ import { UserService } from './services/user.service';
     RequestService,
     UserService,
     // QuestionService,
-    // AlbumsService,
+    AlbumService,
     // UserAlbumsService,
   ],
   exports: []

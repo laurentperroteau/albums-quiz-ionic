@@ -1,7 +1,11 @@
+import { Observable } from 'rxjs/Observable';
+
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
-import { UserService } from '../../app/core/services/user.service';
-import { Observable } from 'rxjs/Observable';
+
+import { FRONT_HOME_PAGE } from '../pages.constants';
+
+import { UserService } from '../../app/core';
 
 @IonicPage()
 @Component({
@@ -17,7 +21,7 @@ import { Observable } from 'rxjs/Observable';
 </ion-header>
 
 <ion-content padding>
-  <button ion-button icon-start>
+  <button (click)="goToFront()" ion-button icon-start>
     <ion-icon name="trophy"></ion-icon>
     Répondre aux questions
   </button>
@@ -37,6 +41,10 @@ export class HomePage {
     private _navCtrl: NavController,
     private _userService: UserService) {
     this.isLogin = _userService.isLogin();
+  }
+
+  goToFront() {
+    this._navCtrl.push(FRONT_HOME_PAGE);
   }
 
   goToBO() {
